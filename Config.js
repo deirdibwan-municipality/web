@@ -10,3 +10,4 @@ const ADMIN_SECRET = "CHANGE_ME_123";
 
 // اسم الحملة اللي بيبين فوق (اختياري)
 const CAMPAIGN_TITLE = "حملة تبرعات";
+ 
