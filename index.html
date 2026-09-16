@@ -36,6 +36,14 @@
     max-width:600px;
     text-align:center;
   }
+  .logo{
+    width:96px;
+    height:96px;
+    object-fit:contain;
+    margin:0 auto 14px;
+    display:block;
+    filter: drop-shadow(0 4px 14px rgba(0,0,0,0.35));
+  }
   .campaign-title{
     font-size:16px;
     color:var(--muted);
@@ -107,7 +115,8 @@
 <body>
 
 <div class="stage">
-  <div class="campaign-title" id="campaignTitle">حملة مساندة</div>
+  <img class="logo" src="logo.png" alt="شعار البلدية">
+  <div class="campaign-title" id="campaignTitle">حملة تبرعات</div>
 
   <div class="goal-label">الهدف</div>
   <div class="goal-amount" id="goalAmount">$0</div>
