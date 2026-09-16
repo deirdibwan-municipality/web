@@ -6,7 +6,7 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxtA7PmALAE6M-2
 
 // كلمة سر بسيطة تمنع أي حدا يضيف تبرعات من غير علمك
 // لازم تكون مطابقة تماماً لقيمة SECRET بملف Code.gs
-const ADMIN_SECRET = "CHANGE_ME_123";
+const ADMIN_SECRET = "123";
 
 // اسم الحملة اللي بيبين فوق (اختياري)
 const CAMPAIGN_TITLE = "حملة تبرعات";
