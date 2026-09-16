@@ -3,297 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>عداد الحملة</title>
+<meta name="theme-color" content="#081C18">
+<title>حملة تبرعات</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Lalezar&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --bg:#081C18;
-    --panel:rgba(14,38,33,0.78);
-    --panel-solid:#0E2621;
-    --gold:#D4A24C;
-    --gold-2:#F0C878;
-    --text:#F5F1E6;
-    --muted:#84A79A;
-    --rule:rgba(245,241,230,0.10);
-  } 
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    min-height:100vh;
-    font-family:'Cairo', 'Segoe UI', Tahoma, sans-serif;
-    color:var(--text);
-    background:
-      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(212,162,76,0.16), transparent 60%),
-      var(--bg);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:32px 16px;
-  }
-  .stage{
-    width:100%;
-    max-width:640px;
-    text-align:center;
-  }
-  .campaign-title{
-    font-size:15px;
-    color:var(--muted);
-    font-weight:700;
-    letter-spacing:0.3px;
-    margin-bottom:2px;
-  }
-  .remaining-label{
-    font-size:15px;
-    color:var(--gold-2);
-    font-weight:700;
-    margin-top:18px;
-  }
-  .remaining-amount{
-    font-family:'Lalezar', 'Cairo', sans-serif;
-    font-size:clamp(56px, 12vw, 110px);
-    line-height:1;
-    color:var(--text);
-    margin-top:4px;
-    text-shadow: 0 0 40px rgba(212,162,76,0.25);
-  }
-  .stats-row{
-    display:flex;
-    justify-content:center;
-    gap:28px;
-    margin-top:14px;
-    font-size:15px;
-    color:var(--muted);
-    font-weight:600;
-    flex-wrap:wrap;
-  }
-  .stats-row b{
-    color:var(--gold-2);
-    font-weight:800;
-  }
-
-  .bar-outer{
-    position:relative;
-    height:22px;
-    background:rgba(255,255,255,0.06);
-    border-radius:100px;
-    margin-top:20px;
-    overflow:hidden;
-    border:1px solid var(--rule);
-  }
-  .bar-inner{
-    position:absolute;
-    inset:0;
-    width:0%;
-    background:linear-gradient(90deg, #B77F33, var(--gold-2));
-    border-radius:100px;
-    transition:width 900ms cubic-bezier(.2,.8,.2,1);
-  }
-  .bar-pct{
-    margin-top:8px;
-    font-size:13px;
-    color:var(--muted);
-    font-weight:700;
-  }
-
-  .feed{
-    margin-top:30px;
-    text-align:right;
-  }
-  .feed h2, .board h2{
-    font-size:14px;
-    color:var(--muted);
-    font-weight:700;
-    margin:0 0 10px;
-  }
-  .feed ul, .board ol{
-    list-style:none;
-    margin:0; padding:0;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-  .feed li{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 14px;
-    background:var(--panel);
-    border:1px solid var(--rule);
-    border-radius:12px;
-    font-size:14.5px;
-    backdrop-filter: blur(6px);
-    animation: rise 420ms ease-out;
-  }
-  @keyframes rise{
-    from{opacity:0; transform:translateY(8px);}
-    to{opacity:1; transform:translateY(0);}
-  }
-  .feed li .dot{
-    width:7px;height:7px;border-radius:50%;
-    background:var(--gold-2);
-    flex:0 0 auto;
-  }
-  .feed li .who{font-weight:700; flex:1 1 auto;}
-  .feed li .amt{color:var(--gold-2); font-weight:800;}
-
-  .board{
-    margin-top:26px;
-    text-align:right;
-  }
-  .board li{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:10px 14px;
-    background:var(--panel);
-    border:1px solid var(--rule);
-    border-radius:12px;
-    backdrop-filter: blur(6px);
-  }
-  .rank{
-    flex:0 0 auto;
-    width:28px;height:28px;
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    font-weight:800;
-    font-size:13px;
-    background:rgba(255,255,255,0.06);
-    color:var(--gold-2);
-  }
-  .board li:first-child .rank{background:var(--gold); color:#1a1206;}
-  .board .name{flex:1 1 auto; font-weight:700; font-size:14.5px;}
-  .board .amt{color:var(--gold-2); font-weight:800; font-size:14.5px;}
-
-  .empty{
-    color:var(--muted);
-    font-size:13.5px;
-    text-align:center;
-    padding:10px 0;
-  }
-  .goal-reached{
-    margin-top:18px;
-    font-family:'Lalezar', 'Cairo', sans-serif;
-    font-size:clamp(26px,5vw,38px);
-    color:var(--gold-2);
-  }
+:root{
+  --bg:#061714;
+  --bg2:#0a211c;
+  --card:rgba(15,39,33,.78);
+  --card2:#0b211c;
+  --gold:#d4a24c;
+  --gold2:#f2cf84;
+  --text:#f7f2e7;
+  --muted:#8eaaa0;
+  --line:rgba(247,242,231,.10);
+  --shadow:0 24px 70px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; min-height:100vh; color:var(--text);
+  font-family:Cairo,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% -15%,rgba(212,162,76,.20),transparent 38%),
+    radial-gradient(circle at 0% 80%,rgba(36,113,88,.12),transparent 35%),
+    var(--bg);
+}
+.page{width:min(760px,100%);margin:auto;padding:38px 18px 60px}
+.hero{text-align:center}
+.badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 13px;border:1px solid var(--line);border-radius:999px;
+  background:rgba(255,255,255,.035);color:var(--gold2);
+  font-size:12px;font-weight:800;
+}
+.badge i{width:7px;height:7px;border-radius:50%;background:#72c59d;box-shadow:0 0 12px #72c59d}
+.title{font-family:Lalezar,Cairo,sans-serif;font-size:clamp(30px,7vw,50px);margin:15px 0 0;color:var(--gold2)}
+.subtitle{margin:0;color:var(--muted);font-size:14px}
+.main-card{
+  margin-top:25px;padding:28px 22px 24px;border:1px solid var(--line);
+  border-radius:24px;background:linear-gradient(145deg,rgba(16,43,36,.9),rgba(8,28,24,.82));
+  box-shadow:var(--shadow);text-align:center;
+}
+.label{color:var(--muted);font-size:14px;font-weight:700}
+.remaining{
+  margin:3px 0 4px;font-family:Lalezar,Cairo,sans-serif;
+  font-size:clamp(60px,15vw,115px);line-height:1;color:var(--text);
+  text-shadow:0 0 45px rgba(212,162,76,.22);
+}
+.stats{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-top:13px;color:var(--muted);font-size:14px;font-weight:600}
+.stats strong{color:var(--gold2);font-size:15px}
+.progress{
+  height:18px;margin-top:24px;border:1px solid var(--line);
+  border-radius:999px;background:rgba(255,255,255,.055);overflow:hidden;
+}
+.progress-fill{
+  height:100%;width:0;border-radius:inherit;
+  background:linear-gradient(90deg,#a9702d,var(--gold2));
+  transition:width 900ms cubic-bezier(.2,.8,.2,1);
+}
+.pct{margin-top:8px;color:var(--muted);font-size:12px;font-weight:800}
+.reached{
+  display:none;margin-top:20px;padding:16px;border:1px solid rgba(242,207,132,.22);
+  border-radius:16px;background:rgba(212,162,76,.07);color:var(--gold2);
+  font-family:Lalezar,Cairo,sans-serif;font-size:25px;
+}
+.section{margin-top:28px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
+.section h2{margin:0;font-size:14px;color:var(--muted)}
+.count{font-size:11px;color:var(--muted);padding:4px 8px;border:1px solid var(--line);border-radius:999px}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.item{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;
+  border:1px solid var(--line);border-radius:14px;background:var(--card);
+  backdrop-filter:blur(8px);animation:up .35s ease both;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gold2);flex:none}
+.name{flex:1;font-size:14px;font-weight:700}
+.amount{color:var(--gold2);font-weight:900;font-size:14px}
+.rank{
+  width:30px;height:30px;display:grid;place-items:center;flex:none;
+  border-radius:50%;background:rgba(255,255,255,.06);color:var(--gold2);font-weight:900;font-size:12px;
+}
+.top-list .item:first-child .rank{background:var(--gold);color:#201606}
+.empty{padding:15px;text-align:center;color:var(--muted);font-size:13px}
+.footer{text-align:center;color:rgba(142,170,160,.65);font-size:11px;margin-top:35px}
+@keyframes up{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@media(max-width:520px){
+  .page{padding-top:25px}
+  .main-card{padding:24px 16px 20px}
+  .stats{gap:16px}
+}
 </style>
 </head>
+
 <body>
+<main class="page">
+  <header class="hero">
+    <div class="badge"><i></i> التحديث مباشر</div>
+    <div class="title" id="campaignTitle">حملة تبرعات</div>
+    <p class="subtitle">ساهم بما تستطيع، وكل مساهمة تصنع فرقاً.</p>
+  </header>
 
-<div class="stage">
-  <div class="campaign-title" id="campaignTitle">حملة تبرعات</div>
+  <section class="main-card">
+    <div id="progressBlock">
+      <div class="label">متبقي للوصول إلى الهدف</div>
+      <div class="remaining" id="remainingAmount">$0</div>
 
-  <div id="progressBlock">
-    <div class="remaining-label">متبقي للوصول للهدف</div>
-    <div class="remaining-amount" id="remainingAmount">$0</div>
+      <div class="stats">
+        <span>تم جمع <strong id="totalRaised">$0</strong></span>
+        <span>الهدف <strong id="goalAmount">$0</strong></span>
+        <span>المساهمات <strong id="donationCount">0</strong></span>
+      </div>
 
-    <div class="stats-row">
-      <span>تم جمع <b id="totalRaised">$0</b></span>
-      <span>الهدف <b id="goalAmount">$0</b></span>
+      <div class="progress"><div class="progress-fill" id="barInner"></div></div>
+      <div class="pct" id="barPct">0٪</div>
     </div>
 
-    <div class="bar-outer"><div class="bar-inner" id="barInner"></div></div>
-    <div class="bar-pct" id="barPct">0٪</div>
-  </div>
+    <div class="reached" id="reachedBlock">
+      🎉 تم الوصول إلى الهدف! شكراً لكل من ساهم
+    </div>
+  </section>
 
-  <div id="reachedBlock" class="goal-reached" style="display:none;">🎉 تم الوصول للهدف! شكراً لكل من ساهم</div>
+  <section class="section">
+    <div class="section-head">
+      <h2>آخر التبرعات</h2>
+      <span class="count">مباشر</span>
+    </div>
+    <ul class="list" id="feedList"></ul>
+    <div class="empty" id="feedEmpty">جاري التحميل…</div>
+  </section>
 
-  <div class="feed">
-    <h2>آخر التبرعات</h2>
-    <ul id="feedList"></ul>
-    <div class="empty" id="feedEmpty" style="display:none;">بانتظار أول تبرع…</div>
-  </div>
+  <section class="section">
+    <div class="section-head">
+      <h2>الأكثر تبرعاً</h2>
+    </div>
+    <ol class="list top-list" id="topList"></ol>
+    <div class="empty" id="topEmpty">لا توجد بيانات بعد.</div>
+  </section>
 
-  <div class="board">
-    <h2>الأكثر تبرعاً</h2>
-    <ol id="topList"></ol>
-  </div>
-</div>
+  <div class="footer">يتم تحديث البيانات تلقائياً</div>
+</main>
 
 <script src="config.js"></script>
 <script>
-(function(){
-  document.getElementById('campaignTitle').textContent = CAMPAIGN_TITLE;
+(() => {
+  const $ = id => document.getElementById(id);
 
-  function fmt(n){
-    n = Number(n) || 0;
-    return '$' + n.toLocaleString('en-US', {maximumFractionDigits:0});
-  }
+  $('campaignTitle').textContent = CAMPAIGN_TITLE;
 
-  let lastSeenCount = 0;
-  let firstLoad = true;
-
-  async function poll(){
-    try{
-      const res = await fetch(APPS_SCRIPT_URL + '?action=data&t=' + Date.now());
-      const data = await res.json();
-      render(data);
-    }catch(e){
-      // silent fail, just try again next tick
-    }
-  }
+  const fmt = n => '$' + (Number(n) || 0).toLocaleString('en-US', {
+    maximumFractionDigits: 0
+  });
 
   function render(data){
     const goal = Number(data.goal) || 0;
     const total = Number(data.total) || 0;
     const remaining = Math.max(0, goal - total);
-    const pct = goal > 0 ? Math.min(100, (total/goal)*100) : 0;
+    const pct = goal > 0 ? Math.min(100, total / goal * 100) : 0;
 
-    document.getElementById('remainingAmount').textContent = fmt(remaining);
-    document.getElementById('totalRaised').textContent = fmt(total);
-    document.getElementById('goalAmount').textContent = fmt(goal);
-    document.getElementById('barInner').style.width = pct + '%';
-    document.getElementById('barPct').textContent = Math.round(pct) + '٪';
+    $('remainingAmount').textContent = fmt(remaining);
+    $('totalRaised').textContent = fmt(total);
+    $('goalAmount').textContent = fmt(goal);
+    $('donationCount').textContent = Number(data.count) || 0;
+    $('barInner').style.width = pct + '%';
+    $('barPct').textContent = Math.round(pct) + '٪';
 
-    if (goal > 0 && total >= goal){
-      document.getElementById('progressBlock').style.display = 'none';
-      document.getElementById('reachedBlock').style.display = 'block';
-    } else {
-      document.getElementById('progressBlock').style.display = 'block';
-      document.getElementById('reachedBlock').style.display = 'none';
-    }
+    const reached = goal > 0 && total >= goal;
+    $('progressBlock').style.display = reached ? 'none' : 'block';
+    $('reachedBlock').style.display = reached ? 'block' : 'none';
 
-    // recent feed
-    const feedList = document.getElementById('feedList');
-    const feedEmpty = document.getElementById('feedEmpty');
     const recent = Array.isArray(data.recent) ? data.recent : [];
-    if (recent.length === 0){
-      feedEmpty.style.display = 'block';
-      feedList.innerHTML = '';
-    } else {
-      feedEmpty.style.display = 'none';
-      feedList.innerHTML = '';
-      recent.forEach(d=>{
-        const li = document.createElement('li');
-        li.innerHTML = '<span class="dot"></span><span class="who"></span><span class="amt"></span>';
-        li.querySelector('.who').textContent = (d.name || 'بدون اسم') + ' تبرع بـ';
-        li.querySelector('.amt').textContent = fmt(d.amount);
-        feedList.appendChild(li);
-      });
-    }
+    $('feedList').innerHTML = '';
+    $('feedEmpty').style.display = recent.length ? 'none' : 'block';
 
-    // top 5
-    const topList = document.getElementById('topList');
-    topList.innerHTML = '';
-    const top = Array.isArray(data.top) ? data.top : [];
-    top.forEach((d,i)=>{
+    recent.forEach((d, i) => {
       const li = document.createElement('li');
-      li.innerHTML = '<span class="rank"></span><span class="name"></span><span class="amt"></span>';
-      li.querySelector('.rank').textContent = i+1;
-      li.querySelector('.name').textContent = d.name;
-      li.querySelector('.amt').textContent = fmt(d.amount);
-      topList.appendChild(li);
+      li.className = 'item';
+      li.style.animationDelay = Math.min(i * 35, 250) + 'ms';
+      li.innerHTML = '<span class="dot"></span><span class="name"></span><span class="amount"></span>';
+      li.querySelector('.name').textContent = (d.name || 'بدون اسم') + ' تبرع بـ';
+      li.querySelector('.amount').textContent = fmt(d.amount);
+      $('feedList').appendChild(li);
     });
 
-    firstLoad = false;
+    const top = Array.isArray(data.top) ? data.top : [];
+    $('topList').innerHTML = '';
+    $('topEmpty').style.display = top.length ? 'none' : 'block';
+
+    top.forEach((d, i) => {
+      const li = document.createElement('li');
+      li.className = 'item';
+      li.innerHTML = '<span class="rank"></span><span class="name"></span><span class="amount"></span>';
+      li.querySelector('.rank').textContent = i + 1;
+      li.querySelector('.name').textContent = d.name || 'بدون اسم';
+      li.querySelector('.amount').textContent = fmt(d.amount);
+      $('topList').appendChild(li);
+    });
+  }
+
+  async function poll(){
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('PASTE_YOUR')) return;
+
+    try{
+      const res = await fetch(APPS_SCRIPT_URL + '?action=data&t=' + Date.now(), {
+        cache: 'no-store'
+      });
+      const data = await res.json();
+      if (data.ok !== false) render(data);
+    }catch(err){
+      // محاولة تلقائية في الدورة التالية
+    }
   }
 
   poll();
-  setInterval(poll, 4000); // يتحدث كل ٤ ثواني — يناسب البث المباشر
+  setInterval(poll, 5000);
 })();
 </script>
-
 </body>
 </html>
