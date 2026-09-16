@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#081C18">
+<title>لوحة التحكم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Lalezar&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#061714;--panel:#0e2822;--panel2:#0a201b;
+  --gold:#d4a24c;--gold2:#f2cf84;--text:#f7f2e7;
+  --muted:#8eaaa0;--line:rgba(247,242,231,.10);--danger:#df7860;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;color:var(--text);font-family:Cairo,Arial,sans-serif;
+  background:radial-gradient(circle at 50% -10%,rgba(212,162,76,.16),transparent 40%),var(--bg);
+}
+.wrap{width:min(760px,100%);margin:auto;padding:30px 18px 60px}
+.header{display:flex;justify-content:space-between;gap:15px;align-items:flex-end;margin-bottom:20px}
+h1{font-family:Lalezar,Cairo,sans-serif;color:var(--gold2);font-size:34px;margin:0}
+.sub{margin:2px 0 0;color:var(--muted);font-size:13px}
+.status{font-size:11px;color:var(--muted);padding:7px 10px;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+.status.ok{color:#9ed7b9;border-color:rgba(158,215,185,.2)}
+.panel{
+  padding:20px;margin-bottom:16px;border:1px solid var(--line);
+  border-radius:18px;background:rgba(14,40,34,.78);
+  box-shadow:0 18px 50px rgba(0,0,0,.18);
+}
+.panel h2{font-size:14px;color:var(--muted);margin:0 0 14px}
+.grid{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field label{display:block;color:var(--muted);font-size:12px;font-weight:700;margin-bottom:6px}
+input{
+  width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:11px;
+  background:var(--panel2);color:var(--text);font:inherit;outline:none;
+}
+input:focus{border-color:var(--gold)}
+.btn{
+  min-height:45px;padding:0 18px;border:0;border-radius:11px;
+  background:var(--gold);color:#201606;font:800 14px Cairo;cursor:pointer;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stat{padding:14px;border:1px solid var(--line);border-radius:13px;background:rgba(0,0,0,.10)}
+.stat small{display:block;color:var(--muted);font-size:11px}.stat b{display:block;color:var(--gold2);font-size:19px;margin-top:2px}
+.log{display:grid;gap:8px;max-height:380px;overflow:auto}
+.row{
+  display:flex;align-items:center;gap:10px;padding:11px 12px;
+  background:var(--panel2);border:1px solid var(--line);border-radius:11px;font-size:13px
+}
+.row .name{flex:1;font-weight:700}.row .amount{color:var(--gold2);font-weight:900}
+.empty{text-align:center;color:var(--muted);font-size:13px;padding:15px}
+.note{color:var(--muted);font-size:11px;margin-top:10px;line-height:1.8}
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);
+  opacity:0;pointer-events:none;padding:12px 18px;border-radius:12px;
+  background:#102b24;border:1px solid var(--gold);color:var(--text);
+  font-size:13px;font-weight:700;transition:.22s;z-index:10
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:620px){
+  .header{align-items:flex-start}.grid,.fields{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}
+  .btn{width:100%}
+}
+</style>
+</head>
+
+<body>
+<main class="wrap">
+  <header class="header">
+    <div>
+      <h1>لوحة التحكم</h1>
+      <p class="sub" id="campaignTitle">حملة تبرعات</p>
+    </div>
+    <div class="status" id="status">جاري الاتصال…</div>
+  </header>
+
+  <section class="panel">
+    <h2>ملخص الحملة</h2>
+    <div class="stats">
+      <div class="stat"><small>تم جمع</small><b id="totalNow">$0</b></div>
+      <div class="stat"><small>الهدف</small><b id="goalNow">$0</b></div>
+      <div class="stat"><small>عدد المساهمات</small><b id="countNow">0</b></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>بيانات الدخول</h2>
+    <div class="fields">
+      <div class="field">
+        <label>كلمة سر الإدارة</label>
+        <input id="secretInput" type="password" autocomplete="off" placeholder="أدخل SECRET">
+      </div>
+      <div class="field">
+        <label>رابط Apps Script</label>
+        <input id="urlView" type="text" readonly>
+      </div>
+    </div>
+    <div class="note">كلمة السر لا تُحفظ في المتصفح ولا توضع داخل config.js. أدخلها عند استخدام لوحة التحكم.</div>
+  </section>
+
+  <section class="panel">
+    <h2>تحديث هدف الحملة</h2>
+    <div class="grid">
+      <div class="field">
+        <label>المبلغ المستهدف بالدولار</label>
+        <input id="goalInput" type="number" min="1" step="1" placeholder="200000">
+      </div>
+      <button class="btn" id="setGoalBtn">حفظ الهدف</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>إضافة تبرع جديد</h2>
+    <div class="fields">
+      <div class="field">
+        <label>اسم المتبرع</label>
+        <input id="nameInput" type="text" maxlength="100" placeholder="أبو أحمد">
+      </div>
+      <div class="field">
+        <label>المبلغ بالدولار</label>
+        <input id="amountInput" type="number" min="1" step="1" placeholder="100">
+      </div>
+    </div>
+    <button class="btn" id="addBtn" style="width:100%;margin-top:12px">إضافة التبرع</button>
+  </section>
+
+  <section class="panel">
+    <h2>آخر التبرعات</h2>
+    <div class="log" id="logList"><div class="empty">جاري التحميل…</div></div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  $('campaignTitle').textContent = CAMPAIGN_TITLE;
+  $('urlView').value = APPS_SCRIPT_URL;
+
+  const fmt = n => '$' + (Number(n) || 0).toLocaleString('en-US',{maximumFractionDigits:0});
+
+  function toast(msg){
+    const t=$('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(window._toast); window._toast=setTimeout(()=>t.classList.remove('show'),2600);
+  }
+
+  function secret(){
+    return $('secretInput').value.trim();
+  }
+
+  function validUrl(){
+    return APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('PASTE_YOUR');
+  }
+
+  async function request(params){
+    const url = APPS_SCRIPT_URL + '?' + new URLSearchParams(params).toString();
+    const res = await fetch(url,{cache:'no-store'});
+    return await res.json();
+  }
+
+  function render(data){
+    $('totalNow').textContent=fmt(data.total);
+    $('goalNow').textContent=fmt(data.goal);
+    $('countNow').textContent=Number(data.count)||0;
+
+    if(document.activeElement !== $('goalInput')){
+      $('goalInput').value=data.goal||'';
+    }
+
+    const recent=Array.isArray(data.recent)?data.recent:[];
+    const log=$('logList');
+    log.innerHTML='';
+
+    if(!recent.length){
+      log.innerHTML='<div class="empty">لا توجد تبرعات بعد.</div>';
+      return;
+    }
+
+    recent.forEach(d=>{
+      const row=document.createElement('div');
+      row.className='row';
+      row.innerHTML='<span class="name"></span><span class="amount"></span>';
+      row.querySelector('.name').textContent=d.name||'بدون اسم';
+      row.querySelector('.amount').textContent=fmt(d.amount);
+      log.appendChild(row);
+    });
+  }
+
+  async function refresh(){
+    if(!validUrl()){
+      $('status').textContent='ضع رابط Apps Script أولاً';
+      return;
+    }
+    try{
+      const data=await request({action:'data',t:Date.now()});
+      if(data.ok===false) throw new Error(data.error);
+      render(data);
+      $('status').textContent='متصل ✓';
+      $('status').classList.add('ok');
+    }catch(e){
+      $('status').textContent='تعذر الاتصال';
+      $('status').classList.remove('ok');
+    }
+  }
+
+  async function addDonation(){
+    const name=$('nameInput').value.trim();
+    const amount=Number($('amountInput').value);
+    const sec=secret();
+
+    if(!sec) return toast('أدخل كلمة سر الإدارة أولاً');
+    if(!name) return toast('اكتب اسم المتبرع');
+    if(!amount || amount<=0) return toast('أدخل مبلغاً صحيحاً');
+
+    const btn=$('addBtn'); btn.disabled=true;
+    try{
+      const out=await request({action:'add',secret:sec,name,amount});
+      if(out.ok){
+        $('nameInput').value=''; $('amountInput').value='';
+        toast('تمت إضافة التبرع ✓');
+        await refresh();
+        $('nameInput').focus();
+      }else{
+        toast(out.error==='unauthorized'?'كلمة السر غير صحيحة':'حدث خطأ: '+out.error);
+      }
+    }catch(e){ toast('تعذر الإرسال'); }
+    finally{ btn.disabled=false; }
+  }
+
+  async function setGoal(){
+    const goal=Number($('goalInput').value);
+    const sec=secret();
+
+    if(!sec) return toast('أدخل كلمة سر الإدارة أولاً');
+    if(!goal || goal<=0) return toast('أدخل هدفاً صحيحاً');
+
+    const btn=$('setGoalBtn'); btn.disabled=true;
+    try{
+      const out=await request({action:'setgoal',secret:sec,goal});
+      if(out.ok){
+        toast('تم تحديث الهدف ✓');
+        await refresh();
+      }else{
+        toast(out.error==='unauthorized'?'كلمة السر غير صحيحة':'حدث خطأ: '+out.error);
+      }
+    }catch(e){ toast('تعذر الإرسال'); }
+    finally{ btn.disabled=false; }
+  }
+
+  $('addBtn').addEventListener('click',addDonation);
+  $('setGoalBtn').addEventListener('click',setGoal);
+
+  $('amountInput').addEventListener('keydown',e=>{if(e.key==='Enter')addDonation()});
+  $('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')addDonation()});
+  $('goalInput').addEventListener('keydown',e=>{if(e.key==='Enter')setGoal()});
+
+  refresh();
+  setInterval(refresh,5000);
+})();
+</script>
+</body>
+</html>
